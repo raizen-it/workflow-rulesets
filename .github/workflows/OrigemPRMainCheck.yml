@@ -1,0 +1,24 @@
+name: Origem PR Main Check
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - "main"
+    types:
+      - synchronize
+      - opened
+      - reopened
+
+jobs:
+  merge-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check branch name pattern
+        run: |
+          if [[ "${{ github.event.pull_request.head.ref }}" =~ ^release/.* ]]; then
+            echo "Branch é uma release/ PR permitido!"
+          else
+            echo "Erro: Branch NÃO é uma release/ PR NÃO permitido!" && exit 1
+          fi
