@@ -21,4 +21,4 @@ jobs:
       run: gh pr edit ${{ github.event.pull_request.number }} --add-assignee ${{ github.actor }}
 
     - name: Assign PR Team Reviewer
-      run: gh pr edit ${{ github.event.pull_request.number }} --add-reviewer raizen-it/squad-plataforma
+      run: gh pr edit ${{ github.event.pull_request.number }} --add-reviewer raizen-it/squad-ris
