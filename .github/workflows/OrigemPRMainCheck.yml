@@ -14,7 +14,7 @@ jobs:
     steps:  
       - name: Check branch name pattern
         run: |
-          if [[ "${{ github.event.pull_request.head.ref }}" =~ ^release/.* || "${{ github.event.pull_request.head.ref }}" =~ ^hotfix/.* ]]; then
+          if [[ "${{ github.event.pull_request.head.ref }}" =~ ^release/.* ]]; then
             echo "Branch é uma release/ ou hotfix/ PR permitido!"
           else
             echo "Erro: Branch NÃO é uma release/ ou hotfix/ PR NÃO permitido!" && exit 1
