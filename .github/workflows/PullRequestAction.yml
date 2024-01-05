@@ -1,0 +1,23 @@
+name: GitFlow Pull Request Action
+
+on:
+  pull_request:
+    types:
+      - opened
+      
+jobs:  
+  gitflow-action:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Assign PR author as Assignee
+      run: gh pr edit ${{ github.event.pull_request.number }} --add-assignee ${{ github.actor }}
+
+    - name: Assign PR Team Reviewer
+      run: gh pr edit ${{ github.event.pull_request.number }} --add-reviewer raizen-it/squad-plataforma
