@@ -2,19 +2,21 @@ name: GitFlow Pull Request Action
 
 on:
   pull_request:
+    branches:
+     - "main"
+     - "develop"
     types:
       - synchronize
       - opened
-      - reopened
-      
+      - reopened      
+
 jobs:  
   gitflow-action:
     runs-on: ubuntu-latest
     env:
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-    
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}    
     steps:
-
+    
     - name: Checkout repository
       uses: actions/checkout@v2
 
