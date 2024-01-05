@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Clear cache
+        run: gh cache list
+        
       - name: Check branch name pattern
         run: |
           if [[ "${{ github.event.pull_request.head.ref }}" =~ ^release/.* || "${{ github.event.pull_request.head.ref }}" =~ ^hotfix/.* ]]; then
