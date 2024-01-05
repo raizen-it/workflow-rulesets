@@ -3,7 +3,9 @@ name: GitFlow Pull Request Action
 on:
   pull_request:
     types:
+      - synchronize
       - opened
+      - reopened
       
 jobs:  
   gitflow-action:
