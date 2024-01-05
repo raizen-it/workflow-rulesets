@@ -1,7 +1,6 @@
 name: Origem PR Main Check
 
 on:
-  workflow_dispatch:
   pull_request:
     branches:
       - "main"
@@ -9,13 +8,11 @@ on:
       - synchronize
       - opened
       - reopened
-
 jobs:
   merge-check:
     runs-on: ubuntu-latest
 
-    steps:
-    
+    steps:  
       - name: Check branch name pattern
         run: |
           if [[ "${{ github.event.pull_request.head.ref }}" =~ ^release/.* || "${{ github.event.pull_request.head.ref }}" =~ ^hotfix/.* ]]; then
