@@ -15,9 +15,6 @@ jobs:
     
     steps:
 
-    - name: Clear cache
-      run: gh cache list
-    
     - name: Checkout repository
       uses: actions/checkout@v2
 
