@@ -2,26 +2,51 @@ name: GitFlow Pull Request Action
 
 on:
   pull_request:
-    branches:
-     - "main"
-     - "develop"
     types:
       - synchronize
       - opened
-      - reopened      
-
+      - reopened
+      
 jobs:  
   gitflow-action:
     runs-on: ubuntu-latest
     env:
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}    
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
-    
     - name: Checkout repository
       uses: actions/checkout@v2
-
-    - name: Assign PR author as Assignee
+    
+    - name: Pegar Hora Atual
+      id: current_time
+      run: |
+            adjusted_time=$(date -d "3 hours ago" +"%H:%M")
+            echo "::set-output name=time::$adjusted_time"
+    
+    - name: Adiciona o autor do PR como Assignee
       run: gh pr edit ${{ github.event.pull_request.number }} --add-assignee ${{ github.actor }}
+    
+    - name: Determina Revisores de Código
+      id: review
+      run: | 
+        
+        current_time="${{ steps.current_time.outputs.time }}"
+        commercial_start=${{ vars.BUSINESS_HOURS_START }}
+        commercial_end=${{ vars.BUSINESS_HOURS_END }}
+    
+        # Obtém o dia da semana (0 para domingo, 6 para sábado)
+        day_of_week=$(date +%u)
 
-    - name: Assign PR Team Reviewer
-      run: gh pr edit ${{ github.event.pull_request.number }} --add-reviewer raizen-it/squad-ris
+        #Verifica se é sábado (6) ou domingo (0)
+        if [[ "$day_of_week" -eq 6 || "$day_of_week" -eq 0 ]]; then
+            echo "Fim de semana - Fora do horário comercial"
+            echo "::set-output name=reviewers::${{ vars.OPERATION_TEAM_OUTSIDE_COMMERCIAL }}"
+        elif [[ "$current_time" > "$commercial_start" && "$current_time" < "$commercial_end" ]]; then
+            echo "Horário comercial"   
+            echo "::set-output name=reviewers::${{ vars.OPERATION_TEAM_COMMERCIAL }}"
+        else
+            echo "Fora do horário comercial"
+            echo "::set-output name=reviewers::${{ vars.OPERATION_TEAM_OUTSIDE_COMMERCIAL }}"
+        fi
+        
+    - name: Adiciona revisores de código ao PR
+      run: gh pr edit ${{ github.event.pull_request.number }} --add-reviewer "${{ steps.review.outputs.reviewers }}"
