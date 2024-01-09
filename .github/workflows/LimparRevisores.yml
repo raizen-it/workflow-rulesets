@@ -3,8 +3,13 @@ name: Ajustar Revisores
 on:
   pull_request:
     types:
+      - synchronize
+      - opened
+      - reopened
       - review_requested
-      - assigned      
+      - review_request_removed
+      - assigned
+      - unassigned
 jobs:  
   Pull-request-action:
     runs-on: ubuntu-latest
