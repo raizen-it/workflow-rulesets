@@ -14,21 +14,7 @@ jobs:
     
     - name: Limpar Revisores
       run: |
-
-            if [ "$GITHUB_EVENT_NAME" != "pull_request" ]; then
-              echo "Esta execução não foi desencadeada por um evento pull_request. Saindo..."
-              exit 0
-            fi
-
-            # Verifica se já foi marcado para evitar loops
-            if [ -n "$REMOVE_REVIEWERS_MARKED" ]; then
-              echo "Já marcado para remover revisores. Saindo..."
-              exit 0
-            fi
-
-            # Marca para evitar loops
-            echo "REMOVE_REVIEWERS_MARKED=true" >> $GITHUB_ENV
-            
+           
             response=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers")   
             
             if [[ $? -eq 0 && $(echo "$response" | jq -e '.message') == "null" ]]; then
