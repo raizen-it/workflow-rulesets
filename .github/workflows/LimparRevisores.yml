@@ -7,7 +7,6 @@ on:
       - assigned      
 jobs:  
   Pull-request-action:
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
