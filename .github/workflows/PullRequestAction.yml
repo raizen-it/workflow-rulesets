@@ -6,8 +6,10 @@ on:
       - synchronize
       - opened
       - reopened
+      - review_requested
       - review_request_removed
-      - unassigned     
+      - assigned
+      - unassigned
 jobs:  
   gitflow-action:
     if: github.event_name == 'pull_request'
