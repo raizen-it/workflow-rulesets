@@ -1,4 +1,4 @@
-name: Limpar Revisores antigos
+name: Ajustar Revisores
 
 on:
   pull_request:
