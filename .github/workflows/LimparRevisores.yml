@@ -3,14 +3,8 @@ name: Limpar Revisores antigos
 on:
   pull_request:
     types:
-      - synchronize
-      - opened
-      - reopened
       - review_requested
-      - review_request_removed
-      - assigned
-      - unassigned
-      
+      - assigned      
 jobs:  
   Pull-request-action:
     if: github.event_name == 'pull_request'
