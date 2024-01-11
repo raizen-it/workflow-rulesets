@@ -82,17 +82,19 @@ jobs:
     - name: Determina Revisores de Código
       id: review
       run: | 
-        
         current_time="${{ steps.current_time.outputs.time }}"
         commercial_start=${{ vars.BUSINESS_HOURS_START }}
         commercial_end=${{ vars.BUSINESS_HOURS_END }}
-    
+        
         # Obtém o dia da semana (0 para domingo, 6 para sábado)
         day_of_week=$(date +%u)
-
+    
         #Verifica se é sábado (6) ou domingo (0)
         if [[ "$day_of_week" -eq 6 || "$day_of_week" -eq 0 ]]; then
             echo "Fim de semana - Fora do horário comercial"
+            echo "reviewers=${{ vars.OPERATION_TEAM_OUTSIDE_COMMERCIAL }}" >> $GITHUB_OUTPUT
+        elif [[ "$day_of_week" -eq 5 && "$current_time" > "17:00" ]]; then
+            echo "Sexta-feira após 17h - Fora do horário comercial"
             echo "reviewers=${{ vars.OPERATION_TEAM_OUTSIDE_COMMERCIAL }}" >> $GITHUB_OUTPUT
         elif [[ "$current_time" > "$commercial_start" && "$current_time" < "$commercial_end" ]]; then
             echo "Horário comercial"   
